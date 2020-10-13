@@ -1,0 +1,32 @@
+public Animator animator;
+    public Transform PuntoDeAtaque;
+	float RangoDeAtaque = 0.05f;
+	public LayerMask enemigo;
+	public int Daño = 20;
+	public float attackRate = 2f;
+	float tiempoSiguienteAtaque = 2f;
+
+    voidupdate()
+	{
+		if (Time.time >= tiempoSiguienteAtaque && input.GetKey("space"))
+		{
+			Ataque();
+			tiempoSiguienteAtaque = Time.time + 1f / attackRate;
+		}
+	}
+
+	void Ataque()
+	{
+		animator.SetTrigger("attack");
+		Collider2D[] EnemigosGolpeados = Phisics2D.OverlapCircleAll(PuntoDeAtaque.position, RangoDeAtaque, enemigo);
+		foreach (Collider2D VariableParaEnemigos in hitEnemies)
+		{
+			enemigo.GetComponent<enemigo>().RecibirDaño(Daño);
+		}
+	}
+	void OnDrawGizmosSelected()
+	{
+		if (attackPoint == null)
+			return;
+		Gizmo.DrawWireSphere(PuntoDeAtaque.position, RangoDeAtaque);
+	}
